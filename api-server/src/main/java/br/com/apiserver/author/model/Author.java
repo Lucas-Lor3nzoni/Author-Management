@@ -1,9 +1,12 @@
 package br.com.apiserver.author.model;
 
+import br.com.apiserver.work.model.Work;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
@@ -42,6 +45,9 @@ public class Author {
 
     @Column(unique = true, length = 11)
     private String cpf;
+
+    @ManyToMany(mappedBy = "authors")
+    private List<Work> works = new ArrayList<>();
 
     @PrePersist
     @PreUpdate

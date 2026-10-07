@@ -2,6 +2,7 @@ package br.com.apiserver.exception;
 
 import br.com.apiserver.author.exception.AuthorAlreadyExistsException;
 import br.com.apiserver.author.exception.AuthorNotFoundException;
+import br.com.apiserver.work.exception.WorkNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
@@ -39,6 +40,19 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse(
                         ex.getMessage(),
                         HttpStatus.CONFLICT.value(),
+                        Instant.now()
+                ));
+    }
+
+    @ExceptionHandler(WorkNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleWorkNotFoundException(
+            WorkNotFoundException ex) {
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(new ErrorResponse(
+                        ex.getMessage(),
+                        HttpStatus.NOT_FOUND.value(),
                         Instant.now()
                 ));
     }
