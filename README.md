@@ -1,260 +1,293 @@
-Author Management API
-REST API for managing authors, works, and administrators, developed with Java and Spring Boot.
+# Author Management API
 
-The project was built to practice and demonstrate backend development concepts such as REST APIs, layered architecture, data persistence, validation, exception handling, JWT authentication, and API documentation with OpenAPI.
+API REST para gerenciamento de autores, livros e administradores, desenvolvida com Java e Spring Boot.
 
-🚀 Technologies
+O projeto foi criado para fins de estudo e prática de desenvolvimento backend, com foco em:
 
-Java 21
-Spring Boot 4.1.1
-Spring Web MVC
-Spring Data JPA
-Spring Security
-Spring Validation
-Springdoc OpenAPI
-Swagger UI
-H2 Database
-MapStruct
-Lombok
-Auth0 Java JWT
-Gradle
-📋 Features
+- REST APIs
+- Arquitetura em camadas
+- Persistência com JPA
+- Validação de dados
+- Tratamento global de exceções
+- Autenticação com JWT
+- Paginação e filtros
+- Documentação com OpenAPI/Swagger
 
-Authors
+## 🚀 Tecnologias
 
-Create authors
-Find an author by ID
-List authors with pagination
-Filter authors by name
-Update authors
-Delete authors
-Prevent deleting authors with associated works
-Administrators
+- Java 21
+- Spring Boot 4.1.1
+- Spring Web MVC
+- Spring Data JPA
+- Spring Security
+- Spring Validation
+- Springdoc OpenAPI
+- Swagger UI
+- H2 Database
+- MapStruct
+- Lombok
+- Auth0 Java JWT
+- Gradle
 
-Create administrators
-Find administrators by ID
-List administrators with pagination
-Update administrators
-Delete administrators
-Activate administrators
-Deactivate administrators
-Authentication
+## ✨ Funcionalidades
 
-Sign in using email and password
-JWT authentication
-Stateless authentication
-Protected API endpoints
-API Documentation
+### Autores
+- Cadastro de autores
+- Busca por ID
+- Listagem com paginação
+- Filtro por nome
+- Atualização de autores
+- Exclusão de autores
+- Bloqueio de exclusão quando há livros associados
 
-OpenAPI documentation
-Swagger UI
-JWT authentication support for testing protected endpoints
-🏗️ Project Architecture
+### Administradores
+- Cadastro de administradores
+- Busca por ID
+- Listagem com paginação
+- Atualização de dados
+- Exclusão de administradores
+- Ativação e desativação de administradores
 
-The application follows a layered architecture, separating responsibilities between controllers, services, repositories, models, DTOs, and mappers.
+### Autenticação
+- Login com email e senha
+- Emissão de JWT
+- Proteção de endpoints
+- Autenticação stateless
 
-src/main/java/br/com/apiserver
-│
-├── author
-│   ├── controller
-│   │   ├── dto
-│   │   └── mapper
-│   ├── exception
-│   ├── model
-│   ├── repository
-│   └── service
-│
-├── authentication
-│   ├── controller
-│   │   ├── dto
-│   │   └── mapper
-│   ├── model
-│   ├── repository
-│   └── service
-│
-└── security
-    ├── auth
-    ├── configuration
-    └── filter
-The general request flow is:
+### Documentação
+- Swagger UI
+- OpenAPI
+- Testes de endpoints autenticados
 
-HTTP Request
-     ↓
-Controller
-     ↓
-Service
-     ↓
-Repository
-     ↓
-Database
-DTOs are used to define the API contract, while MapStruct is responsible for mapping between DTOs and domain models.
+## 🏗️ Estrutura do projeto
 
-🔐 Authentication
+```text
+Author-Management/
+├── README.md
+└── api-server/
+    ├── src/
+    │   ├── main/
+    │   │   ├── java/
+    │   │   │   └── br/com/apiserver/
+    │   │   │       ├── authentication
+    │   │   │       ├── author
+    │   │   │       ├── configuration
+    │   │   │       ├── exception
+    │   │   │       ├── security
+    │   │   │       ├── work
+    │   │   │       └── ApiServerApplication.java
+    │   │   └── resources/
+    │   └── test/
+    ├── build.gradle
+    ├── gradlew
+    ├── gradlew.bat
+    ├── settings.gradle
+    └── gradle/
+```
 
-Authentication is implemented using JWT and Spring Security.
+## 📋 Requisitos
 
-To authenticate, send the user's credentials to:
+Antes de iniciar o projeto, verifique se você possui:
 
+- Java 21
+- Git
+- Gradle ou o wrapper do Gradle incluído no projeto
+
+## ▶️ Como executar
+
+Clone o repositório:
+
+```bash
+git clone https://github.com/Lucas-Lor3nzoni/Author-Management.git
+```
+
+Acesse a pasta da API:
+
+```bash
+cd Author-Management/api-server
+```
+
+Execute a aplicação:
+
+### Linux/macOS
+
+```bash
+./gradlew bootRun
+```
+
+### Windows
+
+```bash
+gradlew.bat bootRun
+```
+
+A aplicação estará disponível em:
+
+```text
+http://localhost:8080
+```
+
+## 📚 Documentação da API
+
+A documentação interativa pode ser acessada em:
+
+```text
+http://localhost:8080/swagger-ui/index.html
+```
+
+A especificação OpenAPI está disponível em:
+
+```text
+http://localhost:8080/v3/api-docs
+```
+
+## 🔐 Autenticação
+
+A API utiliza autenticação JWT com Spring Security.
+
+### Login
+
+```http
 POST /api/v1/auth/sign-in
-Example request:
+Content-Type: application/json
+```
 
+```json
 {
   "email": "admin@example.com",
   "password": "password"
 }
-After successful authentication, the API returns an access token.
+```
 
-Protected endpoints require the following header:
+Após o login, o sistema retorna um token de acesso.
 
+Para acessar endpoints protegidos, envie o cabeçalho:
+
+```http
 Authorization: Bearer <access-token>
-📚 API Endpoints
+```
 
-Authentication
+## 🧩 Endpoints principais
 
-Method	Endpoint	Description
-POST	/api/v1/auth/sign-in	Authenticate a user
-Authors
+### Autenticação
 
-Method	Endpoint	Description
-POST	/api/v1/authors	Create an author
-GET	/api/v1/authors/{id}	Find an author by ID
-GET	/api/v1/authors	List authors
-PUT	/api/v1/authors/{id}	Update an author
-DELETE	/api/v1/authors/{id}	Delete an author
-The author deletion operation is prevented when the author has associated works.
+```http
+POST /api/v1/auth/sign-in
+```
 
-In this case, the API returns:
+### Autores
 
-409 Conflict
-Administrators
+```http
+POST   /api/v1/authors
+GET    /api/v1/authors/{id}
+GET    /api/v1/authors
+PUT    /api/v1/authors/{id}
+DELETE /api/v1/authors/{id}
+```
 
-Method	Endpoint	Description
-POST	/api/v1/administrators	Create an administrator
-GET	/api/v1/administrators/{id}	Find an administrator by ID
-GET	/api/v1/administrators	List administrators
-PUT	/api/v1/administrators/{id}	Update an administrator
-DELETE	/api/v1/administrators/{id}	Delete an administrator
-PATCH	/api/v1/administrators/{id}/activate	Activate an administrator
-PATCH	/api/v1/administrators/{id}/deactivate	Deactivate an administrator
-📖 Swagger UI
+### Livros
 
-After starting the application, the interactive API documentation is available at:
+```http
+POST   /api/v1/works
+GET    /api/v1/works/{id}
+GET    /api/v1/works
+PUT    /api/v1/works/{id}
+DELETE /api/v1/works/{id}
+```
 
-http://localhost:8080/swagger-ui/index.html
-The OpenAPI specification is available at:
+> A documentação completa dos endpoints pode ser consultada no Swagger UI.
 
-http://localhost:8080/v3/api-docs
-Swagger UI can be used to test the API endpoints and, when authentication is configured, send JWT tokens to protected endpoints.
+## 🗄️ Banco de dados
 
-⚙️ Requirements
+O projeto utiliza o banco H2 para desenvolvimento.
 
-Before running the project, make sure you have:
+Console do H2:
 
-Java 21
-Git
-Gradle or the Gradle Wrapper included in the project
-▶️ Running the Application
-
-Clone the repository:
-
-git clone https://github.com/Lucas-Lor3nzoni/Author-Management.git
-Navigate to the API:
-
-cd Author-Management/api-server
-Run the application with Gradle:
-
-Linux / macOS
-
-./gradlew bootRun
-Windows
-
-gradlew.bat bootRun
-The application will be available at:
-
-http://localhost:8080
-🗄️ Database
-
-The project uses an H2 database for development.
-
-The H2 console can be accessed at:
-
+```text
 http://localhost:8080/h2-console
-Database configuration is defined in the application's configuration files.
+```
 
-🧪 Running Tests
+## 🧪 Executando testes
 
-To execute the test suite:
-
-Linux / macOS
-
+```bash
 ./gradlew test
-Windows
+```
 
+Ou no Windows:
+
+```bash
 gradlew.bat test
-📦 Building the Application
+```
 
-To build the project:
+## 📦 Build da aplicação
 
+Para gerar o artefato da aplicação:
+
+```bash
 ./gradlew build
-The generated JAR file will be available in:
+```
 
-build/libs/
-🛡️ Error Handling
+O JAR gerado ficará em:
 
-The API uses centralized exception handling to provide consistent error responses.
+```text
+api-server/build/libs/
+```
 
-Some of the HTTP status codes used by the API are:
+## 🛡️ Tratamento de erros
 
-Status	Description
-200	Request successfully processed
-201	Resource successfully created
-204	Request successfully processed without response body
-400	Invalid request or validation error
-401	Unauthorized
-404	Resource not found
-409	Business rule conflict
-500	Unexpected server error
-Example error response:
+A API utiliza tratamento global de exceções para padronizar as respostas.
 
-{
-  "message": "An unexpected error occurred",
-  "statusCode": 500,
-  "timestamp": "2026-10-07T22:16:33.005309Z",
-  "errors": null
-}
-🔎 Pagination
+Alguns status HTTP utilizados:
 
-Collection endpoints support pagination using Spring Data's Pageable.
+- 200 OK
+- 201 Created
+- 204 No Content
+- 400 Bad Request
+- 401 Unauthorized
+- 404 Not Found
+- 409 Conflict
+- 500 Internal Server Error
 
-Example:
+## 🔎 Paginação
 
+Endpoints de listagem suportam paginação com Spring Data:
+
+```http
 GET /api/v1/authors?page=0&size=10
-Authors can also be filtered by name:
+```
 
+Também é possível filtrar por nome:
+
+```http
 GET /api/v1/authors?name=Machado&page=0&size=10
-🎯 Project Goals
+```
 
-This project was developed to practice and demonstrate:
+## 🎯 Objetivo do projeto
 
-REST API development
-Java and Spring Boot
-Layered architecture
-Dependency injection
-Spring Data JPA
-DTO pattern
-MapStruct
-Bean Validation
-Exception handling
-Spring Security
-JWT authentication
-Pagination
-Business rule validation
-OpenAPI and Swagger documentation
-👨‍💻 Author
+Este projeto foi desenvolvido para praticar e demonstrar:
+
+- Desenvolvimento de API REST
+- Java e Spring Boot
+- Arquitetura em camadas
+- Injeção de dependências
+- Spring Data JPA
+- DTOs
+- MapStruct
+- Bean Validation
+- Tratamento de exceções
+- Spring Security
+- Autenticação JWT
+- Paginação
+- Validação de regras de negócio
+- Documentação OpenAPI/Swagger
+
+## 👨‍💻 Autor
 
 Lucas Lorenzoni
 
 GitHub:
-
 https://github.com/Lucas-Lor3nzoni
-Built with Java and Spring Boot. :::
+
+## ⚠️ Observação
+
+Este projeto foi desenvolvido para fins de estudo e aprendizado, não sendo recomendado para uso em produção.
