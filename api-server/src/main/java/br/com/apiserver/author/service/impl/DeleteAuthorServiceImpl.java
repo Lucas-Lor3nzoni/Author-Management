@@ -1,5 +1,6 @@
 package br.com.apiserver.author.service.impl;
 
+import br.com.apiserver.author.exception.AuthorBusinessException;
 import br.com.apiserver.author.exception.AuthorNotFoundException;
 import br.com.apiserver.author.repository.AuthorRepository;
 import br.com.apiserver.author.service.DeleteAuthorService;
@@ -28,7 +29,7 @@ public class DeleteAuthorServiceImpl implements DeleteAuthorService {
 
         if (!author.getWorks().isEmpty()) {
             log.debug("Author has works associated with it!");
-            throw new AuthorNotFoundException("Author has works associated with it!");
+            throw new AuthorBusinessException("Author has works associated with it!");
         }
 
         authorRepository.delete(author);

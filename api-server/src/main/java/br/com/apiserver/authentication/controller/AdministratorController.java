@@ -7,6 +7,11 @@ import br.com.apiserver.authentication.service.DeleteAdministratorService;
 import br.com.apiserver.authentication.service.FindAdministratorService;
 import br.com.apiserver.authentication.service.SaveAdministratorService;
 import br.com.apiserver.authentication.service.UpdateAdministratorService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +22,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+
+@Tag(
+        name = "Administrator",
+        description = "Administrator management"
+)
 
 @RequiredArgsConstructor
 @Slf4j
@@ -29,6 +39,16 @@ public class AdministratorController {
     private final DeleteAdministratorService deleteAdministratorService;
     private final UpdateAdministratorService updateAdministratorService;
     private final AdministratorMapper administratorMapper;
+
+    @Operation(
+            summary = "Create administrator",
+            description = "Create a new administrator"
+    )
+
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Administrator created"),
+            @ApiResponse(responseCode = "400", description = "Invalid administrator data", content = @Content)
+    })
 
     @PostMapping
     public ResponseEntity<AdminRegisterResponse> save(@Valid @RequestBody AdminRegisterRequest request) {
@@ -47,6 +67,15 @@ public class AdministratorController {
         return ResponseEntity.created(location).body(response);
     }
 
+    @Operation(
+            summary = "Find administrator",
+            description = "Find administrator by id"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Administrator found"),
+            @ApiResponse(responseCode = "404", description = "Administrator not found", content = @Content)
+    })
+
     @GetMapping("/{id}")
     public ResponseEntity<AdminRegisterResponse> findById(@PathVariable Long id) {
         log.info("REST request to find administrator by id");
@@ -56,6 +85,14 @@ public class AdministratorController {
 
         return ResponseEntity.ok(response);
     }
+
+    @Operation(
+            summary = "Find all administrators",
+            description = "Find all administrators"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Administrators found"),
+    })
 
     @GetMapping
     public ResponseEntity<Page<AdminRegisterResponse>> findAll(Pageable pageable) {
@@ -67,6 +104,15 @@ public class AdministratorController {
         return ResponseEntity.ok(models);
     }
 
+    @Operation(
+            summary = "Delete administrator",
+            description = "Delete administrator by id"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Administrator deleted"),
+            @ApiResponse(responseCode = "404", description = "Administrator not found", content = @Content)
+    })
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         log.info("REST request to delete administrator by id");
@@ -75,6 +121,15 @@ public class AdministratorController {
 
         return ResponseEntity.noContent().build();
     }
+
+    @Operation(
+            summary = "Deactivate administrator",
+            description = "Deactivate administrator by id"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Administrator deactivated"),
+            @ApiResponse(responseCode = "404", description = "Administrator not found", content = @Content)
+    })
 
     @PatchMapping("/{id}/deactivate")
     public ResponseEntity<Void> deactivate(@PathVariable Long id) {
@@ -85,6 +140,15 @@ public class AdministratorController {
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(
+            summary = "Activate administrator",
+            description = "Activate administrator by id"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Administrator activated"),
+            @ApiResponse(responseCode = "404", description = "Administrator not found", content = @Content)
+    })
+
     @PatchMapping("/{id}/activate")
     public ResponseEntity<Void> activate(@PathVariable Long id) {
         log.info("REST request to activate administrator with id: {}", id);
@@ -93,6 +157,16 @@ public class AdministratorController {
 
         return ResponseEntity.noContent().build();
     }
+
+    @Operation(
+            summary = "Update administrator",
+            description = "Update administrator by id"
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Administrator updated"),
+            @ApiResponse(responseCode = "400", description = "Invalid administrator data", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Administrator not found", content = @Content)
+    })
 
     @PutMapping("/{id}")
     public ResponseEntity<AdminRegisterResponse> update(@PathVariable Long id,

@@ -1,6 +1,7 @@
 package br.com.apiserver.exception;
 
 import br.com.apiserver.author.exception.AuthorAlreadyExistsException;
+import br.com.apiserver.author.exception.AuthorBusinessException;
 import br.com.apiserver.author.exception.AuthorNotFoundException;
 import br.com.apiserver.work.exception.WorkNotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +41,19 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse(
                         ex.getMessage(),
                         HttpStatus.CONFLICT.value(),
+                        Instant.now()
+                ));
+    }
+
+    @ExceptionHandler(AuthorBusinessException.class)
+    public ResponseEntity<ErrorResponse> handleAuthorBusinessException(
+            AuthorAlreadyExistsException ex) {
+
+        return ResponseEntity
+                .status(HttpStatus.UNPROCESSABLE_CONTENT)
+                .body(new ErrorResponse(
+                        ex.getMessage(),
+                        HttpStatus.UNPROCESSABLE_CONTENT.value(),
                         Instant.now()
                 ));
     }
