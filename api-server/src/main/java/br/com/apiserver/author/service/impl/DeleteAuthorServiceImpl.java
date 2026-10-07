@@ -26,6 +26,11 @@ public class DeleteAuthorServiceImpl implements DeleteAuthorService {
                     return new AuthorNotFoundException("Author not found!");
                 });
 
+        if (!author.getWorks().isEmpty()) {
+            log.debug("Author has works associated with it!");
+            throw new AuthorNotFoundException("Author has works associated with it!");
+        }
+
         authorRepository.delete(author);
     }
 
